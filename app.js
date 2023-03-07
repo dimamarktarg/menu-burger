@@ -81,18 +81,18 @@ if (menuLinks.length > 0) {
     ) {
       const gotoBlock = document.querySelector(menuLink.dataset.goto); // Выбираем кликнутый объект к которому нужно перейти
 
-      /* // Новый способ прокрутки к нужному элементу
       gotoBlock.scrollIntoView({ behavior: "smooth" });
+      /* // Новый способ прокрутки к нужному элементу
       // Отнимаем от прокрутки высоту шапки (в стилях)
       // .page section {
       //   scroll-margin: 70px;
       // } */
 
       // Высчитываем куда переместиться (Расстояние от верха стр. + Прокрученное расстояние - Высота шапки) - Старый способ
-      const gotoBlockValue =
-        gotoBlock.getBoundingClientRect().top +
-        window.pageYOffset -
-        document.querySelector("header").offsetHeight;
+      // const gotoBlockValue =
+      //   gotoBlock.getBoundingClientRect().top +
+      //   window.pageYOffset -
+      //   - document.querySelector("header").offsetHeight;
 
       // Убираем меню при переходе
       if (iconMenu.classList.contains("_active")) {
@@ -101,11 +101,25 @@ if (menuLinks.length > 0) {
         menuBody.classList.remove("_active");
       }
       //
-      window.scrollTo({
-        top: gotoBlockValue,
-        behavior: "smooth",
-      });
+      // window.scrollTo({
+      //   top: gotoBlockValue,
+      //   behavior: "smooth",
+      // });
       e.preventDefault();
     }
   }
 }
+
+/* Когда пользователь прокручивает вниз, скрыть навигационную панель. Когда пользователь прокручивает вверх, показать навигационную панель */
+var prevScrollpos = window.pageYOffset;
+window.onscroll = function () {
+  var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("navbar").style.top = "0";
+    // document.getElementById("navbar").style.display = "block";
+  } else {
+    document.getElementById("navbar").style.top = "-50px";
+    // document.getElementById("navbar").style.display = "none";
+  }
+  prevScrollpos = currentScrollPos;
+};
