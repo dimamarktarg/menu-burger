@@ -111,9 +111,9 @@ if (menuLinks.length > 0) {
 }
 
 /* Когда пользователь прокручивает вниз, скрыть навигационную панель. Когда пользователь прокручивает вверх, показать навигационную панель */
-var prevScrollpos = window.pageYOffset;
+let prevScrollpos = window.pageYOffset;
 window.onscroll = function () {
-  var currentScrollPos = window.pageYOffset;
+  const currentScrollPos = window.pageYOffset;
   if (prevScrollpos > currentScrollPos) {
     document.getElementById("navbar").style.top = "0";
     // document.getElementById("navbar").style.display = "block";
@@ -123,3 +123,70 @@ window.onscroll = function () {
   }
   prevScrollpos = currentScrollPos;
 };
+
+/* --------------------------------------------------------- */
+
+// Анимация счётчика
+window.addEventListener("load", windowLoad);
+
+function windowLoad() {
+  // Функция инициализации
+  function digitsCountersInit(digitsCountersItems) {
+    let digitsCounters = digitsCountersItems
+      ? digitsCountersItems
+      : document.querySelectorAll("[data-digits-counter]");
+    if (digitsCounters) {
+      digitsCounters.forEach((digitsCounter) => {
+        digitsCountersAnimate(digitsCounter);
+      });
+    }
+  }
+  // Функция Анимации
+  function digitsCountersAnimate(digitsCounter) {
+    let startTimestamp = null;
+    const duration = parseInt(digitsCounter.dataset.digitsCounter)
+      ? parseInt(digitsCounter.dataset.digitsCounter)
+      : 1000;
+    const startValue = parseInt(digitsCounter.innerHTML);
+    const startPosition = 0;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      digitsCounter.innerHTML = Math.floor(
+        progress * (startPosition + startValue)
+      );
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }
+  // Пуск при загрузке страницы
+  // digitsCountersInit();
+  // Пуск при скроле (появление блока с счётчиком)
+  let options = {
+    threshold: 0.3,
+  };
+  let observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const targetElement = entry.target;
+        const digitsCountersItems = targetElement.querySelectorAll(
+          "[data-digits-counter]"
+        );
+        if (digitsCountersItems.length) {
+          digitsCountersInit(digitsCountersItems);
+        }
+        // Выключить отслеживание после срабатывания
+        observer.unobserve(targetElement);
+      }
+    });
+  }, options);
+
+  let sections = document.querySelectorAll(".page__row");
+  if (sections.length) {
+    sections.forEach((section) => {
+      observer.observe(section);
+    });
+  }
+}

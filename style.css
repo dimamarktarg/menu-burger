@@ -115,6 +115,7 @@ body._lock {
 .page__title {
   font-size: 40px;
   margin: 0px 0px 20px 0px;
+  text-align: center;
 }
 .page__text {
   font-size: 16px;
@@ -126,6 +127,7 @@ body._lock {
 .page__sub-title {
   font-size: 30px;
   margin: 0px 0px 20px 0px;
+  text-align: center;
 }
 
 /* --------- Шапка с меню ---------- */
@@ -155,6 +157,7 @@ body._lock {
   width: 40px;
   height: 40px;
 }
+
 /* Меню бургер */
 .menu__icon {
   display: none;
@@ -359,4 +362,14 @@ body._touch .menu__list > li._active .menu__arrow {
 
 #navbar {
   transition: all 0.3s ease 0s;
+}
+/* Счётчик */
+.page__row {
+  display: flex;
+  gap: 20px;
+  text-align: center;
+}
+.page__counter {
+  flex: 0 1 33.333%;
+  font-size: 40px;
 }
